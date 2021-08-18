@@ -1,6 +1,6 @@
 {
-  "name": "chartjs-chart-sankey",
-  "version": "0.7.2",
+  "name": "@spitchlingware/chartjs-chart-sankey",
+  "version": "1.0.0",
   "description": "Chart.js module for creating sankey diagrams",
   "main": "dist/chartjs-chart-sankey.js",
   "module": "dist/chartjs-chart-sankey.esm.js",
@@ -15,11 +15,12 @@
     "lint-types": "eslint \"types/**/*.ts\" && tsc -p types/tests/",
     "test": "cross-env NODE_ENV=test concurrently \"npm:test-*\"",
     "test-lint": "npm run lint",
-    "test-karma": "karma start --auto-watch --single-run"
+    "test-karma": "karma start --auto-watch --single-run",
+    "push": "npm publish"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kurkle/chartjs-chart-sankey.git"
+    "url": "ssh://git@github.com/SpitchLingware/backend-api-utils.git"
   },
   "keywords": [
     "chart.js",
@@ -32,10 +33,6 @@
   ],
   "author": "Jukka Kurkela",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kurkle/chartjs-chart-sankey/issues"
-  },
-  "homepage": "https://github.com/kurkle/chartjs-chart-sankey#readme",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^4.26.1",

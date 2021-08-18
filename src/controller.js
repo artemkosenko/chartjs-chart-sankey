@@ -13,31 +13,39 @@ export function buildNodesFromRawData(data) {
   for (let i = 0; i < data.length; i++) {
     const {from, to, flow} = data[i];
 
+    let fromNode;
     if (!nodes.has(from)) {
-      nodes.set(from, {
+      fromNode = {
         key: from,
         in: 0,
         out: flow,
         from: [],
-        to: [{key: to, flow: flow}],
-      });
-    } else {
-      const node = nodes.get(from);
-      node.out += flow;
-      node.to.push({key: to, flow: flow});
-    }
-    if (!nodes.has(to)) {
-      nodes.set(to, {
-        key: to,
-        in: flow,
-        out: 0,
-        from: [{key: from, flow: flow}],
         to: [],
-      });
+      };
+      nodes.set(from, fromNode);
     } else {
-      const node = nodes.get(to);
-      node.in += flow;
-      node.from.push({key: from, flow: flow});
+      fromNode = nodes.get(from);
+      fromNode.out += flow;
+    }
+    /* a thing to draw a single node */
+    if (to) {
+      fromNode.to.push({key: to, flow: flow});
+    }
+
+    if (to) {
+      if (!nodes.has(to)) {
+        nodes.set(to, {
+          key: to,
+          in: flow,
+          out: 0,
+          from: [{key: from, flow: flow}],
+          to: [],
+        });
+      } else {
+        const node = nodes.get(to);
+        node.in += flow;
+        node.from.push({key: from, flow: flow});
+      }
     }
   }
 
@@ -64,9 +72,11 @@ export function buildNodesFromRawData(data) {
  * @return {number}
  */
 function getAddY(arr, key) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].key === key) {
-      return arr[i].addY;
+  if (arr && key) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].key === key) {
+        return arr[i].addY;
+      }
     }
   }
   return 0;
@@ -100,6 +110,7 @@ export default class SankeyController extends DatasetController {
     const {xScale, yScale} = meta;
     const parsed = []; /* Array<SankeyParsedData> */
     const nodes = me._nodes = buildNodesFromRawData(data);
+    // console.log('nodes', nodes);
     /* getDataset() => SankeyControllerDatasetOptions */
     const {priority, size} = me.getDataset();
     if (priority) {
@@ -119,9 +130,9 @@ export default class SankeyController extends DatasetController {
     for (let i = 0, ilen = data.length; i < ilen; ++i) {
       const dataPoint = data[i]; /* {SankeyDataPoint} */
       const from = nodes.get(dataPoint.from); /* from {SankeyNode} */
-      const to = nodes.get(dataPoint.to); /* to {SankeyNode} */
+      const to = nodes.get(dataPoint.to) || {x: 0, y: 0}; /* to {SankeyNode} */
       const fromY = from.y + getAddY(from.to, dataPoint.to);
-      const toY = to.y + getAddY(to.from, dataPoint.from);
+      const toY = (to.y || 0) + getAddY(to.from, dataPoint.from);
       parsed.push({
         x: xScale.parse(from.x, i),
         y: yScale.parse(fromY, i),
@@ -156,7 +167,7 @@ export default class SankeyController extends DatasetController {
    * @param elems {Array<Flow>}
    * @param start {number}
    * @param count {number}
-   * @param mode {"resize" | "reset" | "none" | "hide" | "show" | "normal" | "active"}
+   * @param mode {'resize" | "reset" | "none" | "hide" | "show" | "normal" | "active'}
    */
   updateElements(elems, start, count, mode) {
     const me = this;
