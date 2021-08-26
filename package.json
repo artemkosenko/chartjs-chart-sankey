@@ -1,6 +1,6 @@
 {
   "name": "@spitchlingware/chartjs-chart-sankey",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chart.js module for creating sankey diagrams",
   "main": "dist/chartjs-chart-sankey.js",
   "module": "dist/chartjs-chart-sankey.esm.js",
@@ -37,7 +37,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
-    "chart.js": "^3.0.0",
+    "chart.js": "^3.5.0",
     "chartjs-adapter-date-fns": "^2.0.0",
     "chartjs-test-utils": "^0.3.0",
     "concurrently": "^6.0.0",
